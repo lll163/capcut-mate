@@ -81,6 +81,16 @@ Or use docker-compose:
 docker-compose up -d
 ```
 
+## MCP Bridge (n8n / AI clients)
+
+This repo includes a **stdio** [Model Context Protocol](https://modelcontextprotocol.io/) bridge: it reads root `openapi.yaml` and exposes one MCP tool per `operationId` for each `POST` path, forwarding calls to the same REST API. It also registers `get_draft`, `gen_video`, and `gen_video_status`, which are not present in the published OpenAPI file.
+
+1. Install optional deps: `uv sync --extra mcp` (or install `mcp` and `pyyaml` in your environment).
+2. With the API running, set `CAPCUT_MATE_BASE_URL` if needed (default `http://127.0.0.1:30000/openapi/capcut-mate/v1`).
+3. Run the bridge: `uv run capcut-mate-mcp` or `uv run python -m mcp_server`.
+
+See [docs/MCP_TOOLS.md](./docs/MCP_TOOLS.md) for the full tool ↔ HTTP mapping. In n8n you can call the REST API directly with **HTTP Request**, or use an MCP Client that supports **stdio subprocesses** and the command above.
+
 ## One-Click Import Coze Plugin
 
 1. Open Coze platform: https://coze.cn/home

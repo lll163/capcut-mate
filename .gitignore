@@ -1,3 +1,5 @@
 *.pyc
 .venv
+.venv-fin
+.venv-mcp-test
 ./dist
