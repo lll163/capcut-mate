@@ -81,6 +81,16 @@ docker run -p 30000:30000 gogoshine/capcut-mate:latest
 docker-compose up -d
 ```
 
+## MCP 桥接（n8n / AI 客户端）
+
+本仓库提供基于 [Model Context Protocol](https://modelcontextprotocol.io/) 的 **stdio** 桥接：启动时读取项目根目录的 `openapi.yaml`，为每个 `POST` 路径按 `operationId` 注册一个 MCP tool，并将调用转发到同一套 REST API。另补充注册 `get_draft`、`gen_video`、`gen_video_status`（当前 OpenAPI 文件中未收录）。
+
+1. 安装可选依赖：`uv sync --extra mcp`（或在环境中自行安装 `mcp`、`pyyaml`）。
+2. 启动 API 服务后，按需设置环境变量 `CAPCUT_MATE_BASE_URL`（默认 `http://127.0.0.1:30000/openapi/capcut-mate/v1`）。
+3. 运行桥接：`uv run capcut-mate-mcp` 或 `uv run python -m mcp_server`。
+
+完整 tool 名称、HTTP 方法与路径对照见 [docs/MCP_TOOLS.md](./docs/MCP_TOOLS.md)。在 n8n 中可继续用 **HTTP Request** 直连 REST；若使用支持 **stdio 子进程** 的 MCP Client，可将上述命令配置为启动桥接进程以暴露全部 tools。
+
 ## 一键导入扣子插件
 
 1. 打开扣子平台：https://coze.cn/home
